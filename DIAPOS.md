@@ -1,129 +1,155 @@
-# Présentation MedFlow — Contenu des 7 Diapos
+# Présentation — Contenu des 7 Diapos
 
 ---
 
-## Diapo 1 — Introduction (Titre)
-**MedFlow : Système de Gestion de Rendez-vous Médicaux**
+## Diapo 1 — Introduction
 
-- Problématique : Gestion manuelle des rendez-vous médicaux (perte de temps, erreurs)
-- Solution : Application web automatisée avec architecture DevOps
-- Contexte : Projet DevNet & Automatisation
-- Membres du groupe : [Vos noms]
+**Gestion de Rendez-vous Médicaux**
+
+- **Problématique :** Les cliniques et cabinets médicaux gèrent encore les rendez-vous sur papier ou Excel → perte de temps, doublons, oublis
+- **Solution :** Application web complète avec API REST, base de données, interface moderne et déploiement automatisé
+- **Objectif :** Démontrer les compétences DevNet (DevOps, conteneurisation, CI/CD, automation)
+- **Groupe :** [Vos noms]
 
 ---
 
-## Diapo 2 — Stack Technique & Architecture
+## Diapo 2 — Architecture & Stack Technique
+
+```
+┌──────────────┐     ┌──────────────┐     ┌──────────┐
+│   Navigateur │────▶│   Nginx      │────▶│  MongoDB │
+│   (Angular)  │     │   FastAPI    │     │  :27017  │
+│   :80        │     │   :8000      │     └──────────┘
+└──────────────┘     └──────┬───────┘
+                            │
+                       ┌────▼───────┐
+                       │Nationalize │
+                       │   .io API  │
+                       └────────────┘
+```
 
 | Couche | Technologie |
 |--------|------------|
-| Backend | FastAPI (Python 3.12) |
-| Frontend | Angular 17 |
-| Base de données | MongoDB 7 |
-| Conteneurisation | Docker & Docker Compose (3 services) |
-| API externe | Nationalize.io |
-| CI/CD | GitHub Actions |
-| Automatisation | Bash + Ansible |
-
-**Schéma d'architecture :**
-```
- Browser → Nginx/Angular (:80) → FastAPI (:8000) → MongoDB (:27017)
-                                       ↓
-                                 Nationalize.io
-```
+| Backend | **FastAPI** (Python 3.12) — asynchrone, auto-documenté |
+| Frontend | **Angular 17** — Standalone Components, Glassmorphism |
+| BDD | **MongoDB 7** — NoSQL, flexible |
+| Conteneurisation | **Docker & Docker Compose** — 3 services |
+| API Externe | **Nationalize.io** — prédiction de nationalité |
+| CI/CD | **GitHub Actions** — tests + build automatiques |
+| Automation | **Bash** (deploy.sh) + **Ansible** |
 
 ---
 
-## Diapo 3 — Backend Python (FastAPI)
+## Diapo 3 — Backend FastAPI
 
-- **Framework :** FastAPI (asynchrone, auto-documenté)
-- **Authentification :** JWT (JSON Web Tokens) avec rôles secrétaire/médecin
-- **CRUD complet :** Patients, Médecins, Rendez-vous
-- **Validation :** Pydantic (email, dates, types)
-- **Base de données :** MongoDB avec Motor (driver asynchrone)
-- **Sécurité :** Mots de passe hachés (bcrypt), CORS configuré
+**Routes CRUD complètes :**
 
-Démo → `/docs` (Swagger UI automatique)
+| Méthode | Endpoint | Rôle |
+|---------|----------|------|
+| POST | `/api/auth/login` | Authentification JWT |
+| POST | `/api/auth/register` | Inscription |
+| GET/POST/PUT/DELETE | `/api/patients` | CRUD Patients |
+| GET/POST/PUT/DELETE | `/api/medecins` | CRUD Médecins |
+| GET/POST/PUT/DELETE | `/api/rendezvous` | CRUD Rendez-vous |
+| GET | `/api/external/predict/{name}` | API Nationalize.io |
+
+**Points clés :**
+- ✅ Authentification JWT avec rôles (secrétaire, médecin)
+- ✅ Validation Pydantic (EmailStr, dates, types stricts)
+- ✅ Mots de passe hachés (bcrypt 4.0.1)
+- ✅ Base de données asynchrone (Motor)
+- ✅ Documentation Swagger automatique → `/docs`
 
 ---
 
 ## Diapo 4 — Frontend Angular 17
 
-- **Architecture :** Standalone Components (sans NgModules)
-- **Design :** Glassmorphism (moderne, responsive)
-- **Fonctionnalités :**
-  - Dashboard avec statistiques et rendez-vous du jour
-  - CRUD patients avec prédiction de nationalité (Nationalize.io)
-  - Gestion des médecins et rendez-vous
-  - Filtrage des rendez-vous par date
-  - Changement de statut inline (Confirmé/Annulé/En attente)
-- **Communication :** Service HTTP avec tokens JWT
+**Composants standalone (pas de NgModules) :**
+
+- **LoginComponent** → Authentification avec token JWT
+- **DashboardComponent** → Statistiques + rendez-vous du jour
+- **PatientListComponent** → CRUD + bouton "Prédire nationalité" → appelle Nationalize.io
+- **MedecinListComponent** → Liste des médecins avec spécialités
+- **RendezVousListComponent** → Filtrage par date, changement de statut inline
+
+**Design :** Glassmorphism (verre dépoli), responsive
+**Communication :** ApiService avec tokens JWT dans les headers
 
 ---
 
 ## Diapo 5 — Docker & Automatisation
 
-**Docker Compose (3 services) :**
-```yaml
-services:
-  mongodb:    # MongoDB 7
-  backend:    # FastAPI (Python 3.12-slim)
-  frontend:   # Nginx (multi-stage build: node → nginx)
-```
+**Docker Compose — 3 services conteneurisés :**
 
-**Scripts d'automatisation :**
-- `deploy.sh` → Build + Start + Seed (zéro intervention)
-- `reset.sh` → Suppression complète + rebuild
-- **Ansible :** Playbook pour déploiement sur serveur distant
+| Service | Image | Port |
+|---------|-------|------|
+| `mongodb` | mongo:7 | 27017 |
+| `backend` | Python 3.12-slim + uvicorn | 8000 |
+| `frontend` | Node 20 → Nginx (multi-stage) | 80 |
 
-**Optimisations Docker :**
-- Multi-stage build (frontend : node → nginx)
-- Installation des dépendances avant le code source (cache)
-- Image Python slim (97% plus légère)
+**Optimisations :**
+- Multi-stage build (frontend : dev → prod static)
+- Cache Docker layer (dépendances avant code)
+- Base image Python slim (petite taille)
+- Seed profile pour initialiser la BDD
+
+**Automatisation :**
+- **`deploy.sh`** : build → start → seed (zéro intervention)
+- **`reset.sh`** : down --volumes + rebuild complet
+- **Ansible** : playbook pour déploiement sur serveur distant (Docker + git clone + compose)
 
 ---
 
 ## Diapo 6 — CI/CD & Tests
 
-**Pipeline GitHub Actions :**
-1. Push → Tests backend (pytest)
-2. Build images Docker
-3. Validation docker-compose
+**GitHub Actions Pipeline :**
+```yaml
+on: push → branches: main, develop
+jobs:
+  backend-tests:    # pytest (5 tests)
+  build:            # Docker images (backend + frontend)
+```
 
-**Tests automatisés (5 tests) :**
-- Test racine (`/`)
-- Health check (`/health`)
-- API externe Nationalize.io (`/api/external/predict/{name}`)
-- Documentation Swagger (`/docs`)
-- Schéma OpenAPI (`/openapi.json`)
+**5 tests automatisés (pytest + httpx) :**
+1. ✅ `GET /` → API running
+2. ✅ `GET /health` → status healthy
+3. ✅ `GET /api/external/predict/karim` → Nationalize.io response
+4. ✅ `GET /docs` → Swagger UI
+5. ✅ `GET /openapi.json` → Schéma OpenAPI valide
 
-→ Résultat : ✅ 5/5 tests passent
-
----
-
-## Diapo 7 — Démonstration
-
-**Scénario de démo (5 min) :**
-
-1. **Lancer l'application :** `./deploy.sh`
-2. **Connexion :** admin / admin123
-3. **Dashboard :** Statistiques, rendez-vous du jour
-4. **Patients :** CRUD + bouton "Prédire nationalité"
-5. **Rendez-vous :** Filtre par date, changement de statut
-6. **API Docs :** Swagger UI avec endpoints
-7. **CI/CD :** Montrer le badge GitHub Actions ✅
-
-**Live URLs :**
-- Frontend : http://localhost
-- API Docs : http://localhost:8000/docs
-- GitHub : https://github.com/elaa9/Gestion-Rendez-vous-m-dicaux-Devnet
+**Résultat :** Vert ✅ à chaque push sur GitHub
 
 ---
 
-## Questions possibles & Réponses
+## Diapo 7 — Démonstration en Direct (5 min)
 
-- **Pourquoi FastAPI ?** → Performance asynchrone, documentation auto-générée, validation Pydantic
-- **Pourquoi MongoDB ?** → Schéma flexible pour les données médicales, scaling horizontal
-- **Sécurité ?** → JWT + bcrypt + validation des entrées + CORS
-- **Pourquoi Angular ?** → Architecture modulaire, TypeScript, écosystème complet
-- **CI/CD ?** → GitHub Actions avec tests et build automatisés
-- **API externe ?** → Nationalize.io (gratuit, sans clé API)
+**Étape 1 — Lancer l'application :**
+```bash
+docker-compose build
+docker-compose up -d
+docker-compose run --rm seed
+```
+*(ou `./deploy.sh` sous Linux/Git Bash)*
+
+**Étape 2 — Utilisation :**
+1. Ouvrir http://localhost → Login (admin / admin123)
+2. **Dashboard** : voir les statistiques et rendez-vous du jour
+3. **Patients** : ajouter un patient → cliquer "Prédire nationalité"
+4. **Rendez-vous** : filtrer par date, changer le statut
+5. **API** : ouvrir http://localhost:8000/docs → tester un endpoint
+
+**Étape 3 — CI/CD :** Aller sur GitHub → Actions → montrer le badge vert
+
+---
+
+## Questions & Réponses types
+
+| Question | Réponse |
+|----------|---------|
+| **Pourquoi FastAPI ?** | Asynchrone, documentation auto-générée, validation Pydantic intégrée |
+| **Pourquoi MongoDB ?** | Schéma flexible pour données médicales, scaling facile avec Docker |
+| **Sécurité ?** | JWT (tokens), bcrypt (hash), CORS configuré, validation Pydantic |
+| **API externe ?** | Nationalize.io — gratuit, sans clé, prédiction de nationalité par nom |
+| **Déploiement ?** | Docker Compose local + Ansible pour déploiement distant automatisé |
+| **CI/CD ?** | GitHub Actions : push → tests → build, tout automatisé |
+| **Difficultés ?** | Compatibilité bcrypt/passlib, double `/api` dans l'URL, timeout MongoDB au démarrage |
