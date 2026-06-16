@@ -1,0 +1,67 @@
+version: "3.8"
+
+services:
+  mongodb:
+    image: mongo:7
+    container_name: medflow-mongodb
+    restart: unless-stopped
+    ports:
+      - "27017:27017"
+    volumes:
+      - mongodb_data:/data/db
+    networks:
+      - medflow-network
+
+  backend:
+    build:
+      context: ./backend
+      dockerfile: Dockerfile
+    container_name: medflow-backend
+    restart: unless-stopped
+    ports:
+      - "8000:8000"
+    environment:
+      - MONGO_URI=mongodb://mongodb:27017
+      - DB_NAME=rendez-vous-db
+      - SECRET_KEY=medflow-secret-prod-change-me
+    depends_on:
+      - mongodb
+    networks:
+      - medflow-network
+
+  frontend:
+    build:
+      context: ./frontend
+      dockerfile: Dockerfile
+    container_name: medflow-frontend
+    restart: unless-stopped
+    ports:
+      - "80:80"
+    depends_on:
+      - backend
+    networks:
+      - medflow-network
+
+  seed:
+    build:
+      context: ./backend
+      dockerfile: Dockerfile
+    container_name: medflow-seed
+    command: python -m app.scripts.seed
+    profiles:
+      - seed
+    environment:
+      - MONGO_URI=mongodb://mongodb:27017
+      - DB_NAME=rendez-vous-db
+    depends_on:
+      - mongodb
+    networks:
+      - medflow-network
+    restart: "no"
+
+volumes:
+  mongodb_data:
+
+networks:
+  medflow-network:
+    driver: bridge

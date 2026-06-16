@@ -1,0 +1,59 @@
+---
+- name: Déploiement MedFlow avec Ansible
+  hosts: all
+  become: yes
+  vars:
+    project_dir: /opt/medflow
+    repo_url: "https://github.com/votre-equipe/medflow.git"
+
+  tasks:
+    - name: Installer les prérequis
+      apt:
+        name:
+          - docker.io
+          - docker-compose
+          - git
+          - curl
+        state: present
+        update_cache: yes
+
+    - name: Démarrer Docker
+      service:
+        name: docker
+        state: started
+        enabled: yes
+
+    - name: Cloner le dépôt
+      git:
+        repo: "{{ repo_url }}"
+        dest: "{{ project_dir }}"
+        force: yes
+
+    - name: Construire les images
+      docker_compose:
+        project_src: "{{ project_dir }}"
+        build: yes
+        restarted: yes
+        services:
+          - mongodb
+          - backend
+          - frontend
+
+    - name: Initialiser la base de données
+      docker_compose:
+        project_src: "{{ project_dir }}"
+        services:
+          - seed
+
+    - name: Vérifier que les services sont actifs
+      uri:
+        url: "http://localhost:8000/health"
+        status_code: 200
+
+    - name: Afficher les informations de déploiement
+      debug:
+        msg:
+          - "Déploiement terminé avec succès!"
+          - "Frontend: http://{{ ansible_host }}"
+          - "Backend:  http://{{ ansible_host }}:8000"
+          - "API Docs: http://{{ ansible_host }}:8000/docs"
