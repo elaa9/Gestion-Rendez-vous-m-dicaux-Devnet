@@ -132,7 +132,7 @@ docker-compose run --rm seed
 *(ou `./deploy.sh` sous Linux/Git Bash)*
 
 **Étape 2 — Utilisation :**
-1. Ouvrir http://localhost → Login (admin / admin123)
+1. Ouvrir http://localhost → Login : `admin` / `admin123`
 2. **Dashboard** : voir les statistiques et rendez-vous du jour
 3. **Patients** : ajouter un patient → cliquer "Prédire nationalité"
 4. **Rendez-vous** : filtrer par date, changer le statut

@@ -34,17 +34,6 @@ async def seed():
         ]
         result = await db.medecins.insert_many(medecins)
         print(f"✓ {len(result.inserted_ids)} médecins créés")
-
-        admin_medecin = await db.medecins.find_one({"email": "k.benali@med.com"})
-        if admin_medecin:
-            await db.users.insert_one({
-                "username": "drbenali",
-                "password": pwd_context.hash("medecin123"),
-                "role": "médecin",
-                "medecinRef": str(admin_medecin["_id"]),
-                "createdAt": __import__('datetime').datetime.utcnow()
-            })
-            print("✓ Compte médecin créé (drbenali / medecin123)")
     else:
         print(f"→ {medecins_count} médecins existent déjà")
 

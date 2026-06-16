@@ -1,4 +1,4 @@
-# MedFlow - Système de Gestion de Rendez-vous Médicaux
+# Gestion de Rendez-vous Médicaux
 
 Application complète de gestion des patients, médecins et rendez-vous médicaux avec architecture microservices conteneurisée.
 
@@ -67,8 +67,7 @@ ansible-playbook -i ansible/inventory.ini ansible/deploy.yml
 
 | Utilisateur | Mot de passe | Rôle       |
 |-------------|-------------|------------|
-| admin       | admin123    | secrétaire |
-| drbenali    | medecin123  | médecin    |
+| admin | admin123 | Administrateur |
 
 ## API Endpoints
 
