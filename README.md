@@ -10,7 +10,7 @@ Application complète de gestion des patients, médecins et rendez-vous médicau
 | Frontend    | Angular 17 (Standalone API)          |
 | Base de données | MongoDB 7                         |
 | Conteneurisation | Docker & Docker Compose           |
-| API Externe | REST Countries API                   |
+| API Externe | Nationalize.io                       |
 | CI/CD       | GitHub Actions                       |
 | IAC         | Ansible                              |
 
@@ -18,15 +18,15 @@ Application complète de gestion des patients, médecins et rendez-vous médicau
 
 ```
 ┌──────────┐     ┌──────────┐     ┌──────────┐
-│ Frontend │────▶│  Backend │────▶│ MongoDB  │
-│ :80      │     │ :8000    │     │ :27017   │
-└──────────┘     └────┬─────┘     └──────────┘
-                      │
-                 ┌────▼─────┐
-                 │ REST     │
-                 │ Countries│
-                 │ API      │
-                 └──────────┘
+│ Nginx    │     │ FastAPI  │     │ MongoDB  │
+│ Frontend │────▶│ Backend  │────▶│ :27017   │
+│ :80      │     │ :8000    │     └──────────┘
+└──────────┘     └────┬─────┘
+                       │
+                  ┌────▼─────┐
+                  │Nationalize│
+                  │   .io     │
+                  └──────────┘
 ```
 
 ## Fonctionnalités
@@ -84,7 +84,7 @@ ansible-playbook -i ansible/inventory.ini ansible/deploy.yml
 | POST    | /api/medecins          | Créer un médecin         |
 | GET     | /api/rendezvous        | Liste des rendez-vous    |
 | POST    | /api/rendezvous        | Créer un rendez-vous     |
-| GET     | /api/external/countries| Liste des pays (API externe) |
+| GET     | /api/external/predict/{name}| Prédiction nationalité (Nationalize.io) |
 
 ## Scripts disponibles
 
@@ -108,4 +108,4 @@ Pipeline GitHub Actions avec:
 - Tests backend automatisés
 - Construction des images Docker
 - Validation de la configuration Docker Compose
-"# Gestion-Rendez-vous-m-dicaux-Devnet" 
+ 
