@@ -9,7 +9,7 @@ import { CommonModule } from '@angular/common';
   template: `
     <nav class="glass-nav" *ngIf="isLoggedIn()" style="padding: 12px 24px; display: flex; align-items: center; justify-content: space-between;">
       <div style="display: flex; align-items: center; gap: 32px;">
-        <span style="font-size: 20px; font-weight: 700; background: linear-gradient(135deg, #667eea, #764ba2); -webkit-background-clip: text; -webkit-text-fill-color: transparent;">MedFlow</span>
+        <span style="font-size: 20px; font-weight: 700; background: linear-gradient(135deg, #667eea, #764ba2); -webkit-background-clip: text; -webkit-text-fill-color: transparent;">MedFlowApp</span>
         <div style="display: flex; gap: 8px;">
           <a routerLink="/dashboard" style="text-decoration: none; color: #4a5568; padding: 8px 16px; border-radius: 8px; font-weight: 500; font-size: 14px;">Dashboard</a>
           <a routerLink="/patients" style="text-decoration: none; color: #4a5568; padding: 8px 16px; border-radius: 8px; font-weight: 500; font-size: 14px;">Patients</a>

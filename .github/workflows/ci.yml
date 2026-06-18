@@ -1,4 +1,4 @@
-name: MedFlow CI/CD Pipeline
+name: MedFlowApp CI/CD Pipeline
 
 on:
   push:
@@ -47,14 +47,14 @@ jobs:
         with:
           context: ./backend
           load: true
-          tags: medflow-backend:latest
+          tags: MedFlowApp-backend:latest
 
       - name: Build frontend image
         uses: docker/build-push-action@v6
         with:
           context: ./frontend
           load: true
-          tags: medflow-frontend:latest
+          tags: MedFlowApp-frontend:latest
 
       - name: Test docker-compose
         run: |

@@ -2,7 +2,7 @@
 set -e
 
 echo "=========================================="
-echo "  MedFlow - Réinitialisation Complète"
+echo "  MedFlowApp - Réinitialisation Complète"
 echo "=========================================="
 
 echo ""

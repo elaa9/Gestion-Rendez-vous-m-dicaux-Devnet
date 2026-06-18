@@ -13,7 +13,7 @@ import { CommonModule } from '@angular/common';
       <div class="glass-card" style="padding: 40px; width: 100%; max-width: 420px;">
         <div style="text-align: center; margin-bottom: 32px;">
           <div style="font-size: 40px; margin-bottom: 8px;">🏥</div>
-          <h1 style="font-size: 28px; font-weight: 700; background: linear-gradient(135deg, #667eea, #764ba2); -webkit-background-clip: text; -webkit-text-fill-color: transparent;">MedFlow</h1>
+          <h1 style="font-size: 28px; font-weight: 700; background: linear-gradient(135deg, #667eea, #764ba2); -webkit-background-clip: text; -webkit-text-fill-color: transparent;">MedFlowApp</h1>
           <p style="color: #718096; font-size: 14px; margin-top: 4px;">Système de Gestion Médicale</p>
         </div>
         <div *ngIf="error" class="glass-card" style="padding: 12px 16px; margin-bottom: 16px; background: #fff5f5; border-color: #feb2b2;">

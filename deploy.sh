@@ -2,7 +2,7 @@
 set -e
 
 echo "=========================================="
-echo "  MedFlow - Déploiement Automatisé"
+echo "  MedFlowApp - Déploiement Automatisé"
 echo "=========================================="
 
 echo ""

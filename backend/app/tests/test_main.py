@@ -14,7 +14,7 @@ async def test_root(async_client):
     resp = await async_client.get("/")
     assert resp.status_code == 200
     data = resp.json()
-    assert data["message"] == "API MedFlow is running..."
+    assert data["message"] == "API MedFlowApp is running..."
 
 @pytest.mark.asyncio
 async def test_health(async_client):
