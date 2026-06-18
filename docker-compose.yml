@@ -16,7 +16,7 @@ services:
     build:
       context: ./backend
       dockerfile: Dockerfile
-    container_name: MedFlow-backend
+    container_name: medflow-backend
     restart: unless-stopped
     ports:
       - "8000:8000"
