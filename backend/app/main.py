@@ -11,7 +11,7 @@ async def lifespan(app: FastAPI):
     await close_db()
 
 app = FastAPI(
-    title="MedFlowApp API",
+    title="MedFlow API",
     description="Système de gestion de rendez-vous médicaux",
     version="1.0.0",
     lifespan=lifespan
@@ -33,7 +33,7 @@ app.include_router(external.router)
 
 @app.get("/")
 async def root():
-    return {"message": "API MedFlowApp is running...", "version": "1.0.0"}
+    return {"message": "API MedFlow is running...", "version": "1.0.0"}
 
 @app.get("/health")
 async def health():

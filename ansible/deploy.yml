@@ -1,10 +1,10 @@
 ---
-- name: Déploiement MedFlowApp avec Ansible
+- name: Déploiement MedFlow avec Ansible
   hosts: all
   become: yes
   vars:
-    project_dir: /opt/MedFlowApp
-    repo_url: "https://github.com/votre-equipe/MedFlowApp.git"
+    project_dir: /opt/MedFlow
+    repo_url: "https://github.com/votre-equipe/MedFlow.git"
 
   tasks:
     - name: Installer les prérequis

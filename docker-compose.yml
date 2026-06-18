@@ -3,50 +3,50 @@ version: "3.8"
 services:
   mongodb:
     image: mongo:7
-    container_name: MedFlowApp-mongodb
+    container_name: MedFlow-mongodb
     restart: unless-stopped
     ports:
       - "27017:27017"
     volumes:
       - mongodb_data:/data/db
     networks:
-      - MedFlowApp-network
+      - MedFlow-network
 
   backend:
     build:
       context: ./backend
       dockerfile: Dockerfile
-    container_name: MedFlowApp-backend
+    container_name: MedFlow-backend
     restart: unless-stopped
     ports:
       - "8000:8000"
     environment:
       - MONGO_URI=mongodb://mongodb:27017
       - DB_NAME=rendez-vous-db
-      - SECRET_KEY=MedFlowApp-secret-prod-change-me
+      - SECRET_KEY=MedFlow-secret-prod-change-me
     depends_on:
       - mongodb
     networks:
-      - MedFlowApp-network
+      - MedFlow-network
 
   frontend:
     build:
       context: ./frontend
       dockerfile: Dockerfile
-    container_name: MedFlowApp-frontend
+    container_name: MedFlow-frontend
     restart: unless-stopped
     ports:
       - "80:80"
     depends_on:
       - backend
     networks:
-      - MedFlowApp-network
+      - MedFlow-network
 
   seed:
     build:
       context: ./backend
       dockerfile: Dockerfile
-    container_name: MedFlowApp-seed
+    container_name: MedFlow-seed
     command: python -m app.scripts.seed
     profiles:
       - seed
@@ -56,12 +56,12 @@ services:
     depends_on:
       - mongodb
     networks:
-      - MedFlowApp-network
+      - MedFlow-network
     restart: "no"
 
 volumes:
   mongodb_data:
 
 networks:
-  MedFlowApp-network:
+  MedFlow-network:
     driver: bridge
