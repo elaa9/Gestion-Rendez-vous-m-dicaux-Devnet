@@ -54,7 +54,7 @@ jobs:
         with:
           context: ./frontend
           load: true
-          tags: MedFlow-frontend:latest
+          tags: medflow-frontend:latest
 
       - name: Test docker-compose
         run: |
